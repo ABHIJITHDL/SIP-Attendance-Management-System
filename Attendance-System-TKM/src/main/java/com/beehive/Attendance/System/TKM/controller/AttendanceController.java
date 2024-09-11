@@ -3,10 +3,13 @@ package com.beehive.Attendance.System.TKM.controller;
 import com.beehive.Attendance.System.TKM.Service.AdvisorService;
 import com.beehive.Attendance.System.TKM.Service.AttendanceService;
 import com.beehive.Attendance.System.TKM.Service.MentorService;
+import com.beehive.Attendance.System.TKM.Service.StudentService;
 import com.beehive.Attendance.System.TKM.dto.AttendanceDto;
 import com.beehive.Attendance.System.TKM.entity.Advisor;
 import com.beehive.Attendance.System.TKM.entity.Attendance;
 import com.beehive.Attendance.System.TKM.entity.Mentor;
+import com.beehive.Attendance.System.TKM.entity.Student;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,9 @@ public class AttendanceController {
 
     @Autowired
     private AdvisorService advisorService;
+
+    @Autowired
+    private StudentService studentService;
 
     @PatchMapping
     public ResponseEntity<Void> addOrUpdateAttendance(@RequestBody AttendanceDto attendanceDto){
@@ -52,6 +58,12 @@ public class AttendanceController {
     public List<Attendance> getAttendanceByMentorIdAndDate(@PathVariable String groupId, @PathVariable String date){
         LocalDate attendanceDate = LocalDate.parse(date);
         return attendanceService.findByMentorIdAndDate(groupId, attendanceDate);
+    }
+
+    @GetMapping("/student/{studentId}")
+    public Student getStudentById(@PathVariable Long studentId) {
+        Student student = studentService.findById(studentId).orElse(null);
+        return student;
     }
 
     @GetMapping("mentors")
